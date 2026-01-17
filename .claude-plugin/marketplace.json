@@ -5,13 +5,12 @@
   },
   "metadata": {
     "description": "SNS 콘텐츠 작성 및 MDX 콘텐츠 관리를 위한 Claude Code 플러그인 마켓플레이스",
-    "version": "1.0.0",
-    "pluginRoot": "./plugins"
+    "version": "1.0.0"
   },
   "plugins": [
     {
       "name": "gamja-content-writer",
-      "source": "./gamja-content-writer",
+      "source": "./plugins/gamja-content-writer",
       "description": "SNS 콘텐츠 작성(Threads, Instagram) 및 MDX 콘텐츠 관리를 위한 플러그인",
       "version": "1.0.0",
       "author": {
@@ -23,7 +22,7 @@
     },
     {
       "name": "gamja-mcp",
-      "source": "./gamja-mcp",
+      "source": "./plugins/gamja-mcp",
       "description": "jcg-gamza 교육 콘텐츠 접근을 위한 MCP 서버 설정 가이드",
       "version": "1.0.0",
       "author": {
