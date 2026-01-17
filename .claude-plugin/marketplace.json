@@ -20,6 +20,18 @@
       "keywords": ["threads", "instagram", "mdx", "content", "sns"],
       "category": "content-creation",
       "license": "MIT"
+    },
+    {
+      "name": "gamja-mcp",
+      "source": "./gamja-mcp",
+      "description": "jcg-gamza 교육 콘텐츠 접근을 위한 MCP 서버 설정 가이드",
+      "version": "1.0.0",
+      "author": {
+        "name": "jaahyun"
+      },
+      "keywords": ["mcp", "education", "theory", "search"],
+      "category": "mcp-server",
+      "license": "MIT"
     }
   ]
 }

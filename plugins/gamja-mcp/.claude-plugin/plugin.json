@@ -1,0 +1,10 @@
+{
+  "name": "gamja-mcp",
+  "description": "jcg-gamza 교육 콘텐츠 접근을 위한 MCP 서버 설정 가이드. 이론 조회, 검색, 키워드 패턴 추출 기능 제공.",
+  "version": "1.0.0",
+  "author": {
+    "name": "jaahyun"
+  },
+  "repository": "https://github.com/oooo12-git/gamja-mcp-server",
+  "license": "MIT"
+}
