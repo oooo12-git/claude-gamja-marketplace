@@ -5,12 +5,25 @@ compatibility_date = "2024-12-01"
 [vars]
 JCG_GAMJA_API_URL = "https://jeongcheogi.edugamja.com"
 
-# MCP_AUTH_TOKEN은 시크릿으로 설정해야 합니다:
-# wrangler secret put MCP_AUTH_TOKEN
-# 그 후 안전한 토큰을 입력하세요 (예: openssl rand -base64 32)
+# KV namespace for OAuth (authorization codes, tokens)
+[[kv_namespaces]]
+binding = "OAUTH_STORE"
+id = "51582e50586a4adfb5465cd18567be14"
 
-# MCP_API_KEY도 시크릿으로 설정해야 합니다:
-# wrangler secret put MCP_API_KEY
+# 시크릿 설정 (모두 wrangler secret put으로 설정):
+#
+# 1. MCP_AUTH_TOKEN - MCP API 접근 토큰
+#    wrangler secret put MCP_AUTH_TOKEN
+#    예: openssl rand -base64 32로 생성
+#
+# 2. MCP_API_KEY - jcg-gamza API 인증 키
+#    wrangler secret put MCP_API_KEY
+#
+# 3. AUTH_USERNAME - 로그인 아이디
+#    wrangler secret put AUTH_USERNAME
+#
+# 4. AUTH_PASSWORD - 로그인 패스워드
+#    wrangler secret put AUTH_PASSWORD
 
 # Preview 환경 (dev 브랜치)
 [env.preview]
