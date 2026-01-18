@@ -577,6 +577,470 @@ async function verifyPKCE(codeVerifier: string, codeChallenge: string, method: s
   return computed === codeChallenge;
 }
 
+// ==================== HTML Templates ====================
+
+function renderHomePage(serverUrl: string): string {
+  return `<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gamja MCP Server</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans KR', sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      min-height: 100vh;
+      color: #e8e8e8;
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .logo {
+      font-size: 64px;
+      margin-bottom: 16px;
+    }
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 8px;
+    }
+    .version {
+      display: inline-block;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .description {
+      font-size: 1.1rem;
+      color: #a0a0a0;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    .status-banner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: rgba(46, 213, 115, 0.15);
+      border: 1px solid rgba(46, 213, 115, 0.3);
+      padding: 16px 24px;
+      border-radius: 12px;
+      margin-bottom: 40px;
+    }
+    .status-dot {
+      width: 12px;
+      height: 12px;
+      background: #2ed573;
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(46, 213, 115, 0.4); }
+      50% { opacity: 0.8; box-shadow: 0 0 0 8px rgba(46, 213, 115, 0); }
+    }
+    .status-text {
+      color: #2ed573;
+      font-weight: 600;
+      font-size: 1rem;
+    }
+    .card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 24px;
+      backdrop-filter: blur(10px);
+    }
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .card-icon {
+      font-size: 1.5rem;
+    }
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #fff;
+    }
+    .endpoint-list {
+      list-style: none;
+    }
+    .endpoint-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 10px;
+      margin-bottom: 10px;
+      transition: all 0.2s ease;
+    }
+    .endpoint-item:hover {
+      background: rgba(102, 126, 234, 0.2);
+      transform: translateX(4px);
+    }
+    .endpoint-item:last-child { margin-bottom: 0; }
+    .endpoint-name {
+      font-weight: 500;
+      color: #e8e8e8;
+    }
+    .endpoint-url {
+      font-family: 'SF Mono', 'Monaco', 'Menlo', monospace;
+      font-size: 0.85rem;
+      color: #667eea;
+      background: rgba(102, 126, 234, 0.1);
+      padding: 4px 10px;
+      border-radius: 6px;
+      word-break: break-all;
+    }
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 12px;
+    }
+    .tool-item {
+      background: rgba(0, 0, 0, 0.2);
+      padding: 16px;
+      border-radius: 10px;
+      border-left: 3px solid #667eea;
+    }
+    .tool-name {
+      font-family: 'SF Mono', 'Monaco', 'Menlo', monospace;
+      font-weight: 600;
+      color: #667eea;
+      margin-bottom: 6px;
+    }
+    .tool-desc {
+      font-size: 0.9rem;
+      color: #a0a0a0;
+    }
+    .auth-info {
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+      border: 1px solid rgba(102, 126, 234, 0.3);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+    }
+    .auth-info p {
+      color: #a0a0a0;
+      margin-bottom: 8px;
+    }
+    .auth-highlight {
+      font-weight: 600;
+      color: #667eea;
+    }
+    footer {
+      text-align: center;
+      padding: 32px 0;
+      color: #666;
+      font-size: 0.9rem;
+    }
+    footer a {
+      color: #667eea;
+      text-decoration: none;
+    }
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">🍠</div>
+      <h1>Gamja MCP Server</h1>
+      <span class="version">v2.0.0</span>
+      <p class="description">jcg-gamza 교육 콘텐츠를 위한 Model Context Protocol 서버</p>
+    </header>
+
+    <div class="status-banner">
+      <div class="status-dot"></div>
+      <span class="status-text">서버가 정상 작동 중입니다</span>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="card-icon">🔐</span>
+        <h2 class="card-title">OAuth 2.1 엔드포인트</h2>
+      </div>
+      <ul class="endpoint-list">
+        <li class="endpoint-item">
+          <span class="endpoint-name">Protected Resource Metadata</span>
+          <code class="endpoint-url">${serverUrl}/.well-known/oauth-protected-resource</code>
+        </li>
+        <li class="endpoint-item">
+          <span class="endpoint-name">Authorization Server Metadata</span>
+          <code class="endpoint-url">${serverUrl}/.well-known/oauth-authorization-server</code>
+        </li>
+        <li class="endpoint-item">
+          <span class="endpoint-name">Authorization Endpoint</span>
+          <code class="endpoint-url">${serverUrl}/oauth/authorize</code>
+        </li>
+        <li class="endpoint-item">
+          <span class="endpoint-name">Token Endpoint</span>
+          <code class="endpoint-url">${serverUrl}/oauth/token</code>
+        </li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="card-icon">🔌</span>
+        <h2 class="card-title">API 엔드포인트</h2>
+      </div>
+      <ul class="endpoint-list">
+        <li class="endpoint-item">
+          <span class="endpoint-name">MCP Endpoint</span>
+          <code class="endpoint-url">${serverUrl}/mcp</code>
+        </li>
+        <li class="endpoint-item">
+          <span class="endpoint-name">Health Check</span>
+          <code class="endpoint-url">${serverUrl}/health</code>
+        </li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="card-icon">🛠️</span>
+        <h2 class="card-title">사용 가능한 도구</h2>
+      </div>
+      <div class="tools-grid">
+        <div class="tool-item">
+          <div class="tool-name">list_subjects</div>
+          <div class="tool-desc">이론 과목 목록 조회</div>
+        </div>
+        <div class="tool-item">
+          <div class="tool-name">list_theory_files</div>
+          <div class="tool-desc">특정 과목의 이론 파일 목록</div>
+        </div>
+        <div class="tool-item">
+          <div class="tool-name">read_theory</div>
+          <div class="tool-desc">이론 파일 내용 조회</div>
+        </div>
+        <div class="tool-item">
+          <div class="tool-name">search_content</div>
+          <div class="tool-desc">콘텐츠 키워드 검색</div>
+        </div>
+        <div class="tool-item">
+          <div class="tool-name">extract_patterns</div>
+          <div class="tool-desc">키워드 표 패턴 추출</div>
+        </div>
+        <div class="tool-item">
+          <div class="tool-name">list_exam_registration_files</div>
+          <div class="tool-desc">시험 응시 파일 목록</div>
+        </div>
+        <div class="tool-item">
+          <div class="tool-name">read_exam_registration</div>
+          <div class="tool-desc">시험 응시 파일 내용</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="auth-info">
+      <p>인증 방법</p>
+      <p class="auth-highlight">Claude Code에서 Authenticate 버튼을 사용하세요</p>
+      <p>OAuth 2.1 + PKCE 방식으로 안전하게 인증됩니다</p>
+    </div>
+
+    <footer>
+      <p>Gamja MCP Server &copy; 2025 | <a href="https://jeongcheogi.edugamja.com" target="_blank">jcg-gamza</a></p>
+    </footer>
+  </div>
+</body>
+</html>`;
+}
+
+function renderHealthPage(serverUrl: string): string {
+  const timestamp = new Date().toISOString();
+  return `<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gamja MCP - Health Status</title>
+  <meta http-equiv="refresh" content="30">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans KR', sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      min-height: 100vh;
+      color: #e8e8e8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .health-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      padding: 48px;
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+      backdrop-filter: blur(10px);
+    }
+    .health-icon {
+      font-size: 80px;
+      margin-bottom: 24px;
+    }
+    h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .version {
+      color: #a0a0a0;
+      margin-bottom: 32px;
+    }
+    .status-container {
+      background: rgba(46, 213, 115, 0.1);
+      border: 2px solid rgba(46, 213, 115, 0.3);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 32px;
+    }
+    .status-label {
+      font-size: 0.9rem;
+      color: #a0a0a0;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+    .status-value {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+    .status-dot {
+      width: 16px;
+      height: 16px;
+      background: #2ed573;
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(46, 213, 115, 0.4); }
+      50% { opacity: 0.8; box-shadow: 0 0 0 12px rgba(46, 213, 115, 0); }
+    }
+    .status-text {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #2ed573;
+    }
+    .metrics {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .metric {
+      background: rgba(0, 0, 0, 0.2);
+      padding: 20px;
+      border-radius: 12px;
+    }
+    .metric-label {
+      font-size: 0.8rem;
+      color: #888;
+      margin-bottom: 6px;
+    }
+    .metric-value {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #667eea;
+      font-family: 'SF Mono', 'Monaco', 'Menlo', monospace;
+    }
+    .timestamp {
+      font-size: 0.85rem;
+      color: #666;
+    }
+    .refresh-note {
+      font-size: 0.75rem;
+      color: #555;
+      margin-top: 8px;
+    }
+    .back-link {
+      display: inline-block;
+      margin-top: 24px;
+      color: #667eea;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .back-link:hover {
+      color: #764ba2;
+    }
+  </style>
+</head>
+<body>
+  <div class="health-card">
+    <div class="health-icon">💓</div>
+    <h1>Gamja MCP Server</h1>
+    <p class="version">Version 2.0.0</p>
+
+    <div class="status-container">
+      <div class="status-label">Server Status</div>
+      <div class="status-value">
+        <div class="status-dot"></div>
+        <span class="status-text">Healthy</span>
+      </div>
+    </div>
+
+    <div class="metrics">
+      <div class="metric">
+        <div class="metric-label">Protocol</div>
+        <div class="metric-value">MCP 2024-11-05</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Auth</div>
+        <div class="metric-value">OAuth 2.1</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Tools</div>
+        <div class="metric-value">7 Available</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Runtime</div>
+        <div class="metric-value">Cloudflare</div>
+      </div>
+    </div>
+
+    <p class="timestamp">Last checked: ${timestamp}</p>
+    <p class="refresh-note">This page auto-refreshes every 30 seconds</p>
+
+    <a href="/" class="back-link">← Back to Home</a>
+  </div>
+</body>
+</html>`;
+}
+
 // ==================== OAuth 2.1 Metadata Endpoints ====================
 
 function getProtectedResourceMetadata(serverUrl: string): object {
@@ -1170,31 +1634,20 @@ export default {
       return handleLogin(request, env);
     }
 
-    // Health check (public)
-    if (url.pathname === "/" || url.pathname === "/health") {
+    // Home page (public)
+    if (url.pathname === "/") {
       const serverUrl = getServerUrl(request);
-      return new Response(
-        JSON.stringify({
-          name: "gamja-mcp-server",
-          version: "2.0.0",
-          description: "MCP server for jcg-gamza educational content",
-          status: "running",
-          oauth: {
-            protected_resource_metadata: `${serverUrl}/.well-known/oauth-protected-resource`,
-            authorization_server_metadata: `${serverUrl}/.well-known/oauth-authorization-server`,
-            authorization_endpoint: `${serverUrl}/oauth/authorize`,
-            token_endpoint: `${serverUrl}/oauth/token`,
-          },
-          endpoints: {
-            mcp: `${serverUrl}/mcp`,
-            legacy_login: `${serverUrl}/auth/login`,
-          },
-          auth: "OAuth 2.1 with PKCE (Claude Code Authenticate 버튼 사용)",
-        }),
-        {
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        }
-      );
+      return new Response(renderHomePage(serverUrl), {
+        headers: { ...corsHeaders, "Content-Type": "text/html; charset=utf-8" },
+      });
+    }
+
+    // Health check page (public)
+    if (url.pathname === "/health") {
+      const serverUrl = getServerUrl(request);
+      return new Response(renderHealthPage(serverUrl), {
+        headers: { ...corsHeaders, "Content-Type": "text/html; charset=utf-8" },
+      });
     }
 
     // MCP HTTP endpoint (protected)
