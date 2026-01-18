@@ -1,0 +1,22 @@
+name = "gamja-mcp-server"
+main = "src/worker.ts"
+compatibility_date = "2024-12-01"
+
+[vars]
+JCG_GAMJA_API_URL = "https://jeongcheogi.edugamja.com"
+
+# MCP_AUTH_TOKEN은 시크릿으로 설정해야 합니다:
+# wrangler secret put MCP_AUTH_TOKEN
+# 그 후 안전한 토큰을 입력하세요 (예: openssl rand -base64 32)
+
+# MCP_API_KEY도 시크릿으로 설정해야 합니다:
+# wrangler secret put MCP_API_KEY
+
+# Preview 환경 (dev 브랜치)
+[env.preview]
+name = "gamja-mcp-server-preview"
+
+[env.preview.vars]
+JCG_GAMJA_API_URL = "https://jeongcheogi.edugamja.com"
+
+# Production 환경 (main 브랜치) - 기본 설정 사용
