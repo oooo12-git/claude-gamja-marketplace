@@ -52,9 +52,10 @@ description: Threads 콘텐츠를 Instagram 피드용 caption으로 변환합니
 변환 완료 후 `social/instagram/contents/` 디렉토리에 저장합니다.
 
 ### 파일명 규칙
-- 원본 Threads 파일명을 기반으로 생성
-- 형식: `{콘텐츠명}_{YYYYMMDD}.md`
-- 예시: `jeongcheogi-application_20260105.md`
+- 원본 Threads 파일명 형식을 그대로 따름
+- 형식: `{YYYYMMDD}_{콘텐츠명}.md`
+- 예시: `20260105_jeongcheogi-application.md`
+- 디렉터리에서 날짜별로 정렬되어 포스팅 순서 파악 용이
 
 ### 파일 구조
 ```markdown
